@@ -1,67 +1,112 @@
 <ng-template #subHeader>
   <div class="flex">
     <div class="selects">
-      <div class="select">
-        <label for="agent">Agent</label>
-        <select (change)="selectAgent($event)" id="agent" name="agent">
-          <option *ngFor="let agent of agents.agents$ | async" [value]="agent.id">{{agent.fullName}}</option>
-        </select>
+      <div>
+        <mat-form-field appearance="fill">
+          <div fxLayout="row">
+            <mat-icon> supervised_user_circle </mat-icon>
+            <mat-select
+              placeholder="Agent"
+              (selectionChange)="selectAgent($event)"
+              id="agent"
+              name="agent"
+            >
+              <mat-option
+                *ngFor="let agent of agents.agents$ | async"
+                [value]="agent.id"
+              >
+                {{ agent.fullName }}</mat-option
+              >
+            </mat-select>
+          </div>
+        </mat-form-field>
       </div>
 
-      <div class="select">
-        <label for="call">Call</label>
-        <select (change)="selectCall($event)" id="call" name="call">
-          <option *ngFor="let call of calls.activeAgentCalls$ | async" [value]="call.id">{{call.startTime}}</option>
-        </select>
+      <div>
+        <mat-form-field appearance="fill">
+          <div fxLayout="row">
+            <mat-icon> call </mat-icon>
+            <mat-select
+              placeholder="Call"
+              (selectionChange)="selectCall($event)"
+              id="call"
+              name="call"
+            >
+              <mat-option
+                *ngFor="let call of calls.activeAgentCalls$ | async"
+                [value]="call.id"
+              >
+                {{ call.startTime }}</mat-option
+              >
+            </mat-select>
+          </div>
+        </mat-form-field>
       </div>
     </div>
 
-    <div style="align-items: center; display: flex; gap: .5rem;">
+    <div class="match-sens">
       MATCHING SENSITIVITY
-      <input
-        #matcher (change)="calls.setMatchingPercentage(matcher.value)" [value]="calls.matchingPercentage$ | async"
-        max="100"
-        min="1" type="range"
-        value="50">
+      <mat-slider max="100" min="1" [(ngModel)]="value"> </mat-slider>
+      <span>{{ value }}%</span>
     </div>
   </div>
 </ng-template>
 
 <section class="content">
-  <div class="card">
+  <mat-card class="card">
     <h1>
       Real
-      <span>Matching: 32%</span>
+      <span>Alignment to the expected script: 35%</span>
     </h1>
-    <table *ngIf="calls.activeTranscript$ | async as call" width="100%">
-      <thead>
-      <th>Time</th>
-      <th>Speaker</th>
-      <th>Sentence</th>
-      </thead>
-      <tbody>
-      <tr *ngFor="let transcript of call.transcript">
-        <td>{{ transcript.timeFrom }}</td>
-        <td>{{ call.getSpeaker(transcript.channel) }}</td>
-        <td tooltip="61% matching with line #1 'This is a sample sentence #76'">
-          {{ transcript.sentence }}
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card">
+    <div class="pane">
+      <table *ngIf="calls.activeTranscript$ | async as call" width="100%">
+        <thead>
+          <th>Time</th>
+          <th>Speaker</th>
+          <th>Sentence</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transcript of call.transcript">
+            <td>{{ transcript.timeFrom }}</td>
+            <td>{{ call.getSpeaker(transcript.channel) }}</td>
+            <td
+              tooltip="61% matching with line #1 'This is a sample sentence #76'"
+            >
+              {{ transcript.sentence }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card>
+  <mat-card class="card">
     <h1>
       Expected
-      <span>Matching: 0%</span>
+      <span>Percent of script covered: 100%</span>
     </h1>
-    <!-- TODO: Add Expected -->
-  </div>
+    <div class="pane">
+      <table *ngIf="calls.activeTranscript$ | async as call" width="100%">
+        <thead>
+          <th>Line</th>
+          <th>Speaker</th>
+          <th>Sentence</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let script of call.script; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>Rep:</td>
+            <td
+              tooltip="61% matching with line #1 'This is a sample sentence #76'"
+            >
+              {{ script.sentence }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card>
 </section>
 
 <ng-template>
-  <div class="empty-state">
-    No data to be displayed
-  </div>
+  <div class="empty-state">No data to be displayed</div>
 </ng-template>

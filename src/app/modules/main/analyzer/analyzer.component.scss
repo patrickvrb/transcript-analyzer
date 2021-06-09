@@ -1,38 +1,79 @@
 .flex {
-  display:         flex;
+  display: flex;
   justify-content: space-between;
 
   .selects {
     display: flex;
-    gap:     1.5rem;
+    gap: 1.5rem;
 
     label {
-      margin-right: .5rem;
+      margin-right: 0.5rem;
     }
   }
 }
 
 .content {
   display: flex;
-  gap:     1.5rem;
+  gap: 1.5rem;
 
   .card {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, .2);
-    flex-grow:  1;
-    max-width:  calc(50% - 1.5rem);
-    padding:    1.5rem;
-
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    flex-grow: 1;
+    max-width: calc(50% - 1.5rem);
+    padding: 1.5rem;
+    max-height: 75vh;
     h1 {
-      background-color: #EFEFF1;
-      border-bottom:    1px solid rgba(0, 0, 0, .12);
-      display:          flex;
-      justify-content:  space-between;
-      margin:           -1.5rem -1.5rem 1rem;
-      padding:          .5rem 1rem;
+      background-color: #efeff1;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      display: flex;
+      justify-content: space-between;
+      margin: -1.5rem -1.5rem 1rem;
+      padding: 0.5rem 1rem;
 
       span {
         font-weight: 300;
       }
     }
+  }
+}
+
+.match-sens {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  span {
+    font-weight: bold;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  th {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.pane {
+  display: inline-block;
+  overflow: auto;
+  max-height: 65vh;
+}
+
+::ng-deep {
+  .mat-accent .mat-slider-track-fill {
+    background-color: gray !important;
+  }
+
+  .mat-slider-thumb-label {
+    background-color: gray !important;
+  }
+  .mat-slider-thumb {
+    background-color: gray !important;
+  }
+  .mat-form-field-infix {
+    border: 0 !important;
+  }
+  .mat-divider {
+    width: 100%;
   }
 }
