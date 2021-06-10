@@ -44,8 +44,8 @@
 
     <div class="match-sens width-45vw">
       MATCHING SENSITIVITY
-      <mat-slider max="100" min="1" [(ngModel)]="value"> </mat-slider>
-      <span>{{ value }}%</span>
+      <mat-slider (change)="setMatchingPercentage(percentage)" max="100" min="1" [(ngModel)]="percentage"> </mat-slider>
+      <span>{{ percentage }}%</span>
     </div>
   </div>
 </ng-template>
@@ -67,8 +67,8 @@
           <tr *ngFor="let transcriptLine of dataSource">
             <td>{{ transcriptLine.time }}</td>
             <td>{{ transcriptLine.speaker.split(' ')[0] }}</td>
-            <td
-              tooltip="61% matching with line #1 'This is a sample sentence #76'"
+            <td [matTooltipDisabled]="!transcriptLine.matchingLine"
+            matTooltip="{{transcriptLine.similarity | percent}} matching with line #{{transcriptLine.matchingLine}} ' {{transcriptLine.matchingSentence}} '"
             >
               {{ transcriptLine.sentence }}
             </td>
@@ -93,9 +93,7 @@
           <tr *ngFor="let script of call.script; let i = index">
             <td>{{ i + 1 }}</td>
             <td>Rep:</td>
-            <td
-              tooltip="61% matching with line #1 'This is a sample sentence #76'"
-            >
+            <td>
               {{ script.sentence }}
             </td>
           </tr>

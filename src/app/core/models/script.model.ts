@@ -4,15 +4,15 @@ export default class Script {
   @JsonProperty()
   public channel: number;
   @JsonProperty({ name: 'matching_line' })
-  public matchingLine: number | null;
+  public matching_line: string ;
   @JsonProperty({ name: 'matching_sentence' })
-  public matchingSentence: string | null;
+  public matching_sentence: string ;
   @JsonProperty()
   public order: number;
   @JsonProperty()
   public sentence: string;
   @JsonProperty()
-  public similarity: number | null;
+  public similarity: number;
   @JsonProperty()
   public timeFrom: number | null | undefined;
   @JsonProperty()
@@ -20,11 +20,11 @@ export default class Script {
 
   constructor() {
     this.channel = 0;
-    this.matchingLine = null;
-    this.matchingSentence = null;
+    this.matching_line = '';
+    this.matching_sentence = '';
     this.order = 0;
     this.sentence = '';
-    this.similarity = null;
+    this.similarity = 0;
     this.timeFrom = null;
     this.timeTo = null;
   }

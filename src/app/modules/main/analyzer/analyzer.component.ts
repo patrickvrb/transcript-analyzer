@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import AgentFacade from 'src/app/core/facades/agent.facade';
 import CallFacade from 'src/app/core/facades/call.facade';
 import Call from 'src/app/core/models/call.model';
+import Script from 'src/app/core/models/script.model';
 import Transcript from 'src/app/core/models/transcript.model';
 
 import TemplateService from 'src/app/core/services/template.service';
@@ -27,7 +28,7 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
   public dataSource: any[] = [];
   public dataSourceRep: any[] = [];
   calls: Call[] = [];
-  value = 1;
+  percentage = 38;
   formatedCalls: any;
   transcript: Transcript | undefined;
   constructor(
@@ -42,6 +43,7 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    this.setMatchingPercentage(this.percentage)
     // this.dataSourceRep = MOCK_DATA().slice(-25);
   }
 
@@ -55,14 +57,22 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
 
   public selectCall(event: any): void {
     this._calls.selectCall(event.value);
-    this.dataSource = this.mockData();
+    this.dataSource = this.mockTranscriptData();
   }
 
-  private mockData = () => {
+  public setMatchingPercentage(percentage: any): void {
+    
+    this._calls.setMatchingPercentage(percentage);
+  }
+
+  private mockTranscriptData = () => {
     const DATA: {
       time: string;
       speaker: any;
       sentence: string;
+      similarity: number;
+      matchingSentence: string;
+      matchingLine: string | undefined
     }[] = [];
 
     // Channels:  0 - Unknown ; 1 - Agent ; 2 - Customer
@@ -81,14 +91,24 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
             ? ''
             : SPEAKERS[transcriptLine.channel],
         sentence: transcriptLine.sentence,
+        similarity: transcriptLine.similarity < 0 ? 0 : transcriptLine.similarity,
+        matchingSentence: transcriptLine.matching_sentence,
+        matchingLine: this.matchSentences(transcriptLine)?.toString()
       });
       pastChannel = transcriptLine.channel;
     });
-
     console.log(DATA);
-
+    
     return DATA;
   };
+
+  private matchSentences(transcriptLine: Script): number | undefined  {
+    let scriptLine = this.transcript?.script.filter((scriptLine) => transcriptLine.matching_sentence === scriptLine.sentence)
+    if(scriptLine?.length) {   
+      return scriptLine[0].order + 1
+    }
+    else return undefined
+  }
 
   private formatTime(time: any): string {
     const min = Math.floor(time / 60);
