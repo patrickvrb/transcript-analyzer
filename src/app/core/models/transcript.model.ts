@@ -1,45 +1,44 @@
-import {JsonProperty} from 'json-object-mapper';
+import { JsonProperty } from 'json-object-mapper';
 import Channel from 'src/app/core/models/channel.model';
 import Script from 'src/app/core/models/script.model';
 
 export default class Transcript {
-  @JsonProperty({type: Channel})
+  @JsonProperty({ type: Channel })
   public agent: Channel | null;
-  @JsonProperty({type: Channel})
+  @JsonProperty({ type: Channel })
   public customer: Channel | null;
   @JsonProperty()
   public duration: number | null;
-  @JsonProperty({name: 'call_id'})
+  @JsonProperty({ name: 'call_id' })
   public id: string | null;
   @JsonProperty()
   public script: Script[];
   @JsonProperty({
     name: 'call_datetime',
-    type: Date
+    type: Date,
   })
   public time: Date | null;
   @JsonProperty()
   public transcript: Script[];
-  @JsonProperty({name: 'calltype_id'})
+  @JsonProperty({ name: 'calltype_id' })
   public type: string | null;
 
   constructor() {
-    this.agent      = null;
-    this.customer   = null;
-    this.duration   = null;
-    this.id         = null;
-    this.script     = [];
-    this.time       = null;
+    this.agent = null;
+    this.customer = null;
+    this.duration = null;
+    this.id = null;
+    this.script = [];
+    this.time = null;
     this.transcript = [];
-    this.type       = null;
+    this.type = null;
   }
 
-  getSpeaker(channel: number): string | number | null {
+  getSpeaker(channel: number): string | number | null | undefined {
     if (channel === this.agent?.channel) {
-      return this.agent.speakerName;
+      return this.agent.speakerName?.split(' ')[0];
     } else if (channel === this.customer?.channel) {
-      return this.customer.speakerName;
-    }
-    return null;
+      return this.customer.speakerName?.split(' ')[0];
+    } else return 'Unknown';
   }
 }

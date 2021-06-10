@@ -23,7 +23,7 @@
       </div>
 
       <div>
-        <mat-form-field appearance="fill">
+        <mat-form-field class="width-20vw" appearance="fill">
           <div fxLayout="row">
             <mat-icon> call </mat-icon>
             <mat-select
@@ -32,11 +32,9 @@
               id="call"
               name="call"
             >
-              <mat-option
-                *ngFor="let call of calls.activeAgentCalls$ | async"
-                [value]="call.id"
-              >
-                {{ call.startTime }}</mat-option
+              <mat-option *ngFor="let call of calls" [value]="call.id">
+                {{ call.startTime | date: 'M/dd/YYYY' }} -
+                {{ call.customer?.speakerName }}</mat-option
               >
             </mat-select>
           </div>
@@ -44,7 +42,7 @@
       </div>
     </div>
 
-    <div class="match-sens">
+    <div class="match-sens width-45vw">
       MATCHING SENSITIVITY
       <mat-slider max="100" min="1" [(ngModel)]="value"> </mat-slider>
       <span>{{ value }}%</span>
@@ -59,20 +57,20 @@
       <span>Alignment to the expected script: 35%</span>
     </h1>
     <div class="pane">
-      <table *ngIf="calls.activeTranscript$ | async as call" width="100%">
+      <table *ngIf="dataSource" width="100%">
         <thead>
           <th>Time</th>
           <th>Speaker</th>
           <th>Sentence</th>
         </thead>
         <tbody>
-          <tr *ngFor="let transcript of call.transcript">
-            <td>{{ transcript.timeFrom }}</td>
-            <td>{{ call.getSpeaker(transcript.channel) }}</td>
+          <tr *ngFor="let transcriptLine of dataSource">
+            <td>{{ transcriptLine.time }}</td>
+            <td>{{ transcriptLine.speaker.split(' ')[0] }}</td>
             <td
               tooltip="61% matching with line #1 'This is a sample sentence #76'"
             >
-              {{ transcript.sentence }}
+              {{ transcriptLine.sentence }}
             </td>
           </tr>
         </tbody>
@@ -85,7 +83,7 @@
       <span>Percent of script covered: 100%</span>
     </h1>
     <div class="pane">
-      <table *ngIf="calls.activeTranscript$ | async as call" width="100%">
+      <table *ngIf="_calls.activeTranscript$ | async as call" width="100%">
         <thead>
           <th>Line</th>
           <th>Speaker</th>

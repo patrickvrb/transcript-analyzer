@@ -41,6 +41,7 @@
   align-items: center;
   display: flex;
   gap: 0.5rem;
+
   span {
     font-weight: bold;
   }
@@ -51,6 +52,9 @@ table {
   th {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
   }
+  td {
+    padding: 0.8rem;
+  }
 }
 
 .pane {
@@ -59,11 +63,21 @@ table {
   max-height: 65vh;
 }
 
+.width-20vw {
+  width: 20vw;
+}
+
+.width-45vw {
+  width: 45vw;
+}
+
 ::ng-deep {
+  .mat-slider-horizontal {
+    width: 70%;
+  }
   .mat-accent .mat-slider-track-fill {
     background-color: gray !important;
   }
-
   .mat-slider-thumb-label {
     background-color: gray !important;
   }
@@ -72,8 +86,5 @@ table {
   }
   .mat-form-field-infix {
     border: 0 !important;
-  }
-  .mat-divider {
-    width: 100%;
   }
 }
