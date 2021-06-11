@@ -71,6 +71,14 @@ table {
   width: 45vw;
 }
 
+.gray-20 {
+  background: rgba(90, 90, 113, 0.2);
+}
+
+.gray-40 {
+  background: rgba(90, 90, 113, 0.4);
+}
+
 ::ng-deep {
   .mat-slider-horizontal {
     width: 70%;

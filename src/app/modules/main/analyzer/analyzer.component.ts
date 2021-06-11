@@ -31,6 +31,12 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
   percentage = 38;
   formatedCalls: any;
   transcript: Transcript | undefined;
+  percentageScriptCovered = 0;
+  numberScriptsInLine = 0;
+  percentageScriptInLines = 0;
+  hoverState = false;
+  transcriptSentence = '';
+
   constructor(
     public agents: AgentFacade,
     public _calls: CallFacade,
@@ -43,7 +49,7 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    this.setMatchingPercentage(this.percentage)
+    this.setMatchingPercentage(this.percentage);
     // this.dataSourceRep = MOCK_DATA().slice(-25);
   }
 
@@ -58,10 +64,11 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
   public selectCall(event: any): void {
     this._calls.selectCall(event.value);
     this.dataSource = this.mockTranscriptData();
+    this.percentageScriptCovered = this.scriptCoverage();
+    this.percentageScriptInLines = this.scriptInLines();
   }
 
   public setMatchingPercentage(percentage: any): void {
-    
     this._calls.setMatchingPercentage(percentage);
   }
 
@@ -72,7 +79,8 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
       sentence: string;
       similarity: number;
       matchingSentence: string;
-      matchingLine: string | undefined
+      matchingLine: string | undefined;
+      covered: boolean;
     }[] = [];
 
     // Channels:  0 - Unknown ; 1 - Agent ; 2 - Customer
@@ -91,23 +99,32 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
             ? ''
             : SPEAKERS[transcriptLine.channel],
         sentence: transcriptLine.sentence,
-        similarity: transcriptLine.similarity < 0 ? 0 : transcriptLine.similarity,
+        similarity:
+          transcriptLine.similarity < 0 ? 0 : transcriptLine.similarity,
         matchingSentence: transcriptLine.matching_sentence,
-        matchingLine: this.matchSentences(transcriptLine)?.toString()
+        matchingLine: this.matchSentences(transcriptLine)?.toString(),
+        covered: transcriptLine.matching_sentence ? true : false,
       });
       pastChannel = transcriptLine.channel;
     });
+
     console.log(DATA);
-    
+
     return DATA;
   };
 
-  private matchSentences(transcriptLine: Script): number | undefined  {
-    let scriptLine = this.transcript?.script.filter((scriptLine) => transcriptLine.matching_sentence === scriptLine.sentence)
-    if(scriptLine?.length) {   
-      return scriptLine[0].order + 1
-    }
-    else return undefined
+  private matchSentences(transcriptLine: Script): number | undefined {
+    let order = undefined;
+    this.transcript?.script.forEach((scriptLine) => {
+      if (transcriptLine.matching_sentence === scriptLine.sentence) {
+        if (transcriptLine.channel === 1) {
+          this.numberScriptsInLine += 1;
+          scriptLine.covered = true;
+        }
+        order = scriptLine.order + 1;
+      }
+    });
+    return order;
   }
 
   private formatTime(time: any): string {
@@ -118,5 +135,39 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
       (min > 9 ? '' : '0') + min + ':' + (sec > 9 ? '' : '0') + sec;
 
     return formatedTime;
+  }
+
+  private scriptCoverage(): number {
+    let numberCovered = 0;
+    let percentage = 0;
+
+    this.transcript?.script.forEach((script) =>
+      script.covered ? (numberCovered += 1) : undefined
+    );
+
+    this.transcript
+      ? (percentage = numberCovered / this.transcript?.script.length)
+      : undefined;
+    console.log(this.transcript?.script);
+
+    return percentage;
+  }
+
+  private scriptInLines(): number {
+    let percentage = 0;
+    let totalLinesByAgent = 0;
+    this.transcript
+      ? ((totalLinesByAgent = this.transcript.transcript.filter(
+          (line) => line.channel === 1
+        ).length),
+        (percentage = this.numberScriptsInLine / totalLinesByAgent))
+      : undefined;
+
+    return percentage;
+  }
+
+  hoverManagement(hoverState: boolean, transcriptLine: any) {
+    this.hoverState = hoverState;
+    this.transcriptSentence = transcriptLine.matchingSentence;
   }
 }

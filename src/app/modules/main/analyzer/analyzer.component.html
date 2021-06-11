@@ -44,7 +44,13 @@
 
     <div class="match-sens width-45vw">
       MATCHING SENSITIVITY
-      <mat-slider (change)="setMatchingPercentage(percentage)" max="100" min="1" [(ngModel)]="percentage"> </mat-slider>
+      <mat-slider
+        (change)="setMatchingPercentage(percentage)"
+        max="100"
+        min="1"
+        [(ngModel)]="percentage"
+      >
+      </mat-slider>
       <span>{{ percentage }}%</span>
     </div>
   </div>
@@ -54,7 +60,10 @@
   <mat-card class="card">
     <h1>
       Real
-      <span>Alignment to the expected script: 35%</span>
+      <span
+        >Alignment to the expected script:
+        {{ percentageScriptInLines | percent }}</span
+      >
     </h1>
     <div class="pane">
       <table *ngIf="dataSource" width="100%">
@@ -67,8 +76,28 @@
           <tr *ngFor="let transcriptLine of dataSource">
             <td>{{ transcriptLine.time }}</td>
             <td>{{ transcriptLine.speaker.split(' ')[0] }}</td>
-            <td [matTooltipDisabled]="!transcriptLine.matchingLine"
-            matTooltip="{{transcriptLine.similarity | percent}} matching with line #{{transcriptLine.matchingLine}} ' {{transcriptLine.matchingSentence}} '"
+            <td
+              (mouseenter)="
+                hoverManagement(true, transcriptLine); hoverState = true
+              "
+              (mouseleave)="
+                hoverManagement(false, transcriptLine); hoverState = false
+              "
+              [class.gray-20]="
+                transcriptLine.covered &&
+                transcriptLine.similarity >= percentage / 100
+              "
+              [class.gray-40]="
+                transcriptLine.covered &&
+                hoverState &&
+                transcriptLine.matchingSentence === transcriptSentence
+              "
+              [matTooltipDisabled]="!transcriptLine.matchingLine"
+              matTooltip="{{
+                transcriptLine.similarity | percent
+              }} matching with line #{{ transcriptLine.matchingLine }} ' {{
+                transcriptLine.matchingSentence
+              }} '"
             >
               {{ transcriptLine.sentence }}
             </td>
@@ -80,7 +109,10 @@
   <mat-card class="card">
     <h1>
       Expected
-      <span>Percent of script covered: 100%</span>
+      <span
+        >Percent of script covered:
+        {{ percentageScriptCovered | percent }}</span
+      >
     </h1>
     <div class="pane">
       <table *ngIf="_calls.activeTranscript$ | async as call" width="100%">
@@ -90,10 +122,15 @@
           <th>Sentence</th>
         </thead>
         <tbody>
-          <tr *ngFor="let script of call.script; let i = index">
+          <tr *ngFor="let script of transcript?.script; let i = index">
             <td>{{ i + 1 }}</td>
             <td>Rep:</td>
-            <td>
+            <td
+              [class.gray-20]="script.covered"
+              [class.gray-40]="
+                hoverState && script.sentence === transcriptSentence
+              "
+            >
               {{ script.sentence }}
             </td>
           </tr>

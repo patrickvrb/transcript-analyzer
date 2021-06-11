@@ -17,6 +17,7 @@ export default class Script {
   public timeFrom: number | null | undefined;
   @JsonProperty()
   public timeTo: number | null;
+  public covered: boolean;
 
   constructor() {
     this.channel = 0;
@@ -27,5 +28,6 @@ export default class Script {
     this.similarity = 0;
     this.timeFrom = null;
     this.timeTo = null;
+    this.covered = false;
   }
 }
