@@ -1,12 +1,4 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import AgentFacade from 'src/app/core/facades/agent.facade';
 import CallFacade from 'src/app/core/facades/call.facade';
@@ -49,27 +41,15 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    this.setMatchingPercentage(this.percentage);
-    // this.dataSourceRep = MOCK_DATA().slice(-25);
+    this._calls.setMatchingPercentage(38);
+    this._calls.activeTranscript$.subscribe((transcripts) => (this.transcript = transcripts));
   }
 
-  public selectAgent(event: any): void {
-    this.agents.setActiveAgent(event.value);
-    this._calls.activeAgentCalls$.subscribe((calls) => (this.calls = calls));
-    this._calls.activeTranscript$.subscribe(
-      (transcripts) => (this.transcript = transcripts)
-    );
-  }
-
-  public selectCall(event: any): void {
-    this._calls.selectCall(event.value);
+  public selectCall(call: string): void {
+    this._calls.selectCall(call);
     this.dataSource = this.mockTranscriptData();
     this.percentageScriptCovered = this.scriptCoverage();
     this.percentageScriptInLines = this.scriptInLines();
-  }
-
-  public setMatchingPercentage(percentage: any): void {
-    this._calls.setMatchingPercentage(percentage);
   }
 
   private mockTranscriptData = () => {
@@ -84,23 +64,15 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     }[] = [];
 
     // Channels:  0 - Unknown ; 1 - Agent ; 2 - Customer
-    const SPEAKERS = [
-      'Unknown',
-      this.transcript?.agent?.speakerName,
-      this.transcript?.customer?.speakerName,
-    ];
+    const SPEAKERS = ['Unknown', this.transcript?.agent?.speakerName, this.transcript?.customer?.speakerName];
     let pastChannel: number;
 
     this.transcript?.transcript.forEach((transcriptLine) => {
       DATA.push({
         time: this.formatTime(transcriptLine.timeFrom),
-        speaker:
-          pastChannel === transcriptLine.channel
-            ? ''
-            : SPEAKERS[transcriptLine.channel],
+        speaker: pastChannel === transcriptLine.channel ? '' : SPEAKERS[transcriptLine.channel],
         sentence: transcriptLine.sentence,
-        similarity:
-          transcriptLine.similarity < 0 ? 0 : transcriptLine.similarity,
+        similarity: transcriptLine.similarity < 0 ? 0 : transcriptLine.similarity,
         matchingSentence: transcriptLine.matching_sentence,
         matchingLine: this.matchSentences(transcriptLine)?.toString(),
         covered: transcriptLine.matching_sentence ? true : false,
@@ -131,8 +103,7 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     const min = Math.floor(time / 60);
     const sec = Math.floor(time - min * 60);
 
-    const formatedTime =
-      (min > 9 ? '' : '0') + min + ':' + (sec > 9 ? '' : '0') + sec;
+    const formatedTime = (min > 9 ? '' : '0') + min + ':' + (sec > 9 ? '' : '0') + sec;
 
     return formatedTime;
   }
@@ -141,13 +112,9 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     let numberCovered = 0;
     let percentage = 0;
 
-    this.transcript?.script.forEach((script) =>
-      script.covered ? (numberCovered += 1) : undefined
-    );
+    this.transcript?.script.forEach((script) => (script.covered ? (numberCovered += 1) : undefined));
 
-    this.transcript
-      ? (percentage = numberCovered / this.transcript?.script.length)
-      : undefined;
+    this.transcript ? (percentage = numberCovered / this.transcript?.script.length) : undefined;
     console.log(this.transcript?.script);
 
     return percentage;
@@ -157,9 +124,7 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     let percentage = 0;
     let totalLinesByAgent = 0;
     this.transcript
-      ? ((totalLinesByAgent = this.transcript.transcript.filter(
-          (line) => line.channel === 1
-        ).length),
+      ? ((totalLinesByAgent = this.transcript.transcript.filter((line) => line.channel === 1).length),
         (percentage = this.numberScriptsInLine / totalLinesByAgent))
       : undefined;
 
