@@ -15,10 +15,12 @@ export default class CallState {
   private readonly _calls$ = new BehaviorSubject<Call[]>([]);
   private readonly _matchingPercentage$ = new BehaviorSubject<number>(0);
   private readonly _transcripts$ = new BehaviorSubject<Transcript[]>([]);
+  private readonly _tableControl$ = new BehaviorSubject<boolean>(false);
   public activeAgentCalls$ = this._activeAgentCalls$.asObservable();
   public activeTranscript$ = this._activeTranscript$.asObservable();
   public calls$ = this._calls$.asObservable();
   public matchingPercentage$ = this._matchingPercentage$.asObservable();
+  public tableControl$ = this._tableControl$.asObservable();
 
   constructor(private readonly _svc: CallService, private readonly _agents: AgentFacade) {
     this._svc.getCalls$().subscribe((calls: Call[]) => this._calls$.next(calls));
@@ -39,11 +41,11 @@ export default class CallState {
   public selectCall(id: string): void {
     const transcript = this._transcripts$.value.find((transcript: Transcript) => transcript.id === id);
     this._activeTranscript$.next(transcript);
+    this._tableControl$.next(true);
     console.log(id, transcript);
   }
 
   public setMatchingPercentage(value: number | string): void {
     this._matchingPercentage$.next(parseInt(`${value}`));
-    console.log('Matching %', value);
   }
 }

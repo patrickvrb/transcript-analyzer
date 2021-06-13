@@ -1,8 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import AgentFacade from 'src/app/core/facades/agent.facade';
 import CallFacade from 'src/app/core/facades/call.facade';
-import Call from 'src/app/core/models/call.model';
 import Script from 'src/app/core/models/script.model';
 import Transcript from 'src/app/core/models/transcript.model';
 
@@ -26,19 +24,13 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
   public hoverState = false;
   public transcriptSentence = '';
 
-  constructor(
-    public agents: AgentFacade,
-    public _calls: CallFacade,
-    private _tplService: TemplateService,
-    private _router: Router
-  ) {}
+  constructor(public agents: AgentFacade, public _calls: CallFacade, private _tplService: TemplateService) {}
 
   public ngAfterViewInit(): void {
     this._tplService.register('subHeader', this.subHeader);
   }
 
   public ngOnInit(): void {
-    this._calls.setMatchingPercentage(38);
     this._calls.activeTranscript$.subscribe((transcripts) => (this.transcript = transcripts));
   }
 
@@ -49,7 +41,12 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     this.percentageScriptInLines = this.scriptInLines();
   }
 
-  private mockTranscriptData = () => {
+  public hoverManagement(hoverState: boolean, transcriptLine: any) {
+    this.hoverState = hoverState;
+    this.transcriptSentence = transcriptLine.matchingSentence;
+  }
+
+  private mockTranscriptData(): any {
     const DATA: {
       time: string;
       speaker: any;
@@ -80,7 +77,7 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     console.log(DATA);
 
     return DATA;
-  };
+  }
 
   private matchSentences(transcriptLine: Script): number | undefined {
     let order = undefined;
@@ -126,10 +123,5 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
       : undefined;
 
     return percentage;
-  }
-
-  hoverManagement(hoverState: boolean, transcriptLine: any) {
-    this.hoverState = hoverState;
-    this.transcriptSentence = transcriptLine.matchingSentence;
   }
 }

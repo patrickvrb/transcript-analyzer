@@ -10,6 +10,23 @@
       margin-right: 0.5rem;
     }
   }
+
+  .match-sens {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  .width-20vw {
+    width: 20vw;
+  }
+  .width-45vw {
+    width: 45vw;
+  }
 }
 
 .content {
@@ -22,6 +39,17 @@
     max-width: calc(50% - 1.5rem);
     padding: 1.5rem;
     max-height: 75vh;
+    .pane {
+      display: inline-block;
+      overflow: auto;
+      max-height: 65vh;
+      .gray-20 {
+        background: rgba(90, 90, 113, 0.2);
+      }
+      .gray-40 {
+        background: rgba(90, 90, 113, 0.4);
+      }
+    }
     h1 {
       background-color: #efeff1;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -37,46 +65,34 @@
   }
 }
 
-.match-sens {
-  align-items: center;
-  display: flex;
-  gap: 0.5rem;
-
-  span {
-    font-weight: bold;
-  }
-}
-
 table {
   border-collapse: collapse;
   th {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    text-align: left;
+    padding-right: 3vw;
+    padding-bottom: 0.5vw;
   }
   td {
-    padding: 0.8rem;
+    border-bottom: 0.7em solid white;
+    text-align: left;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
+
+  // tr:first-child td {
+  //   padding-top: 0.6em;
+  // }
 }
 
-.pane {
-  display: inline-block;
-  overflow: auto;
-  max-height: 65vh;
+.centering {
+  transform: translateY(50%);
 }
 
-.width-20vw {
-  width: 20vw;
-}
-
-.width-45vw {
-  width: 45vw;
-}
-
-.gray-20 {
-  background: rgba(90, 90, 113, 0.2);
-}
-
-.gray-40 {
-  background: rgba(90, 90, 113, 0.4);
+.pending {
+  font-weight: 700;
+  font-size: 24px;
 }
 
 ::ng-deep {

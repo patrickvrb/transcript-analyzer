@@ -29,7 +29,7 @@
       </mat-form-field>
     </div>
 
-    <div class="match-sens width-45vw">
+    <div *ngIf="_calls.tableControl$ | async" class="match-sens width-45vw">
       MATCHING SENSITIVITY
       <mat-slider (change)="_calls.setMatchingPercentage(percentage)" max="100" min="1" [(ngModel)]="percentage">
       </mat-slider>
@@ -38,14 +38,14 @@
   </div>
 </ng-template>
 
-<section class="content">
+<section *ngIf="_calls.tableControl$ | async" class="content">
   <mat-card class="card">
     <h1>
       Real
       <span>Alignment to the expected script: {{ percentageScriptInLines | percent }}</span>
     </h1>
     <div class="pane">
-      <table *ngIf="dataSource" width="100%">
+      <table width="100%">
         <thead>
           <th>Time</th>
           <th>Speaker</th>
@@ -81,15 +81,15 @@
       <span>Percent of script covered: {{ percentageScriptCovered | percent }}</span>
     </h1>
     <div class="pane">
-      <table *ngIf="_calls.activeTranscript$ | async as call" width="100%">
+      <table width="100%">
         <thead>
           <th>Line</th>
           <th>Speaker</th>
           <th>Sentence</th>
         </thead>
         <tbody>
-          <tr *ngFor="let script of transcript?.script; let i = index">
-            <td>{{ i + 1 }}</td>
+          <tr *ngFor="let script of transcript?.script">
+            <td>{{ script.order + 1 }}</td>
             <td>Rep:</td>
             <td [class.gray-20]="script.covered" [class.gray-40]="hoverState && script.sentence === transcriptSentence">
               {{ script.sentence }}
@@ -101,6 +101,16 @@
   </mat-card>
 </section>
 
-<ng-template>
-  <div class="empty-state">No data to be displayed</div>
-</ng-template>
+<div
+  class="centering"
+  *ngIf="!(_calls.tableControl$ | async)"
+  fxFlex
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayoutGap="24px"
+>
+  <img src="../../../../assets/img/selection-pending.svg" alt="Selection Pending" />
+  <div class="pending">Selection pending</div>
+  <div>Select a call from top menu and a transcript</div>
+  <div>analysis will be shown here</div>
+</div>
