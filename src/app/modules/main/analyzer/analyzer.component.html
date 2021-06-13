@@ -1,36 +1,32 @@
 <ng-template #subHeader>
   <div class="flex">
     <div class="selects">
-      <div>
-        <mat-form-field appearance="fill">
-          <div fxLayout="row">
-            <mat-icon> supervised_user_circle </mat-icon>
-            <mat-select
-              placeholder="Agent"
-              (selectionChange)="agents.setActiveAgent($event.value)"
-              id="agent"
-              name="agent"
+      <mat-form-field appearance="fill">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon> supervised_user_circle </mat-icon>
+          <mat-select
+            placeholder="Agent"
+            (selectionChange)="agents.setActiveAgent($event.value)"
+            id="agent"
+            name="agent"
+          >
+            <mat-option *ngFor="let agent of agents.agents$ | async" [value]="agent.id">
+              {{ agent.fullName }}</mat-option
             >
-              <mat-option *ngFor="let agent of agents.agents$ | async" [value]="agent.id">
-                {{ agent.fullName }}</mat-option
-              >
-            </mat-select>
-          </div>
-        </mat-form-field>
-      </div>
+          </mat-select>
+        </div>
+      </mat-form-field>
 
-      <div>
-        <mat-form-field class="width-20vw" appearance="fill">
-          <div fxLayout="row">
-            <mat-icon> call </mat-icon>
-            <mat-select placeholder="Call" (selectionChange)="selectCall($event.value)" id="call" name="call">
-              <mat-option *ngFor="let call of _calls.activeAgentCalls$ | async" [value]="call.id">
-                {{ call.startTime | date: 'M/dd/YYYY' }} - {{ call.customer?.speakerName }}</mat-option
-              >
-            </mat-select>
-          </div>
-        </mat-form-field>
-      </div>
+      <mat-form-field class="width-20vw" appearance="fill">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon> call </mat-icon>
+          <mat-select placeholder="Call" (selectionChange)="selectCall($event.value)" id="call" name="call">
+            <mat-option *ngFor="let call of _calls.activeAgentCalls$ | async" [value]="call.id">
+              {{ call.startTime | date: 'M/dd/YYYY' }} - {{ call.customer?.speakerName }}</mat-option
+            >
+          </mat-select>
+        </div>
+      </mat-form-field>
     </div>
 
     <div class="match-sens width-45vw">

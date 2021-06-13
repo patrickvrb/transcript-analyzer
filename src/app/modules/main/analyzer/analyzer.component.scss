@@ -93,6 +93,27 @@ table {
     background-color: gray !important;
   }
   .mat-form-field-infix {
+    padding: 0;
     border: 0 !important;
+  }
+  .mat-form-field-wrapper {
+    padding: 0;
+  }
+  .mat-form-field-appearance-fill .mat-select-arrow-wrapper {
+    transform: none !important;
+  }
+  .mat-form-field-appearance-fill .mat-form-field-infix {
+    padding: 0.5em 0.25em !important;
+  }
+  .mat-form-field-flex {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.38);
+    padding: 0 !important;
+  }
+  .mat-form-field-underline {
+    display: none;
+  }
+
+  .mat-option {
+    height: 40px !important;
   }
 }

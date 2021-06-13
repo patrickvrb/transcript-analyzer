@@ -4,9 +4,9 @@ export default class Script {
   @JsonProperty()
   public channel: number;
   @JsonProperty({ name: 'matching_line' })
-  public matching_line: string ;
+  public matching_line: string;
   @JsonProperty({ name: 'matching_sentence' })
-  public matching_sentence: string ;
+  public matching_sentence: string;
   @JsonProperty()
   public order: number;
   @JsonProperty()

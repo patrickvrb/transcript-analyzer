@@ -17,17 +17,14 @@ import TemplateService from 'src/app/core/services/template.service';
 export default class AnalyzerComponent implements OnInit, AfterViewInit {
   @ViewChild('subHeader')
   private subHeader?: TemplateRef<any>;
+  private numberScriptsInLine = 0;
   public dataSource: any[] = [];
-  public dataSourceRep: any[] = [];
-  calls: Call[] = [];
-  percentage = 38;
-  formatedCalls: any;
-  transcript: Transcript | undefined;
-  percentageScriptCovered = 0;
-  numberScriptsInLine = 0;
-  percentageScriptInLines = 0;
-  hoverState = false;
-  transcriptSentence = '';
+  public transcript: Transcript | undefined;
+  public percentageScriptCovered = 0;
+  public percentageScriptInLines = 0;
+  public percentage = 38;
+  public hoverState = false;
+  public transcriptSentence = '';
 
   constructor(
     public agents: AgentFacade,
