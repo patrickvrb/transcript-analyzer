@@ -74,8 +74,6 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
       pastChannel = transcriptLine.channel;
     });
 
-    console.log(DATA);
-
     return DATA;
   }
 
@@ -109,7 +107,6 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     this.transcript?.script.forEach((script) => (script.covered ? (numberCovered += 1) : undefined));
 
     this.transcript ? (percentage = numberCovered / this.transcript?.script.length) : undefined;
-    console.log(this.transcript?.script);
 
     return percentage;
   }

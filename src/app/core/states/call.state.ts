@@ -42,7 +42,6 @@ export default class CallState {
     const transcript = this._transcripts$.value.find((transcript: Transcript) => transcript.id === id);
     this._activeTranscript$.next(transcript);
     this._tableControl$.next(true);
-    console.log(id, transcript);
   }
 
   public setMatchingPercentage(value: number | string): void {
