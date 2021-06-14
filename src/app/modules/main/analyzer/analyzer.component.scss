@@ -1,3 +1,4 @@
+@import '../../../core/theming/trilogy.theme.scss';
 .flex {
   display: flex;
   justify-content: space-between;
@@ -39,17 +40,15 @@
     max-width: calc(50% - 1.5rem);
     padding: 1.5rem;
     max-height: 75vh;
-    .pane {
-      display: inline-block;
-      overflow: auto;
-      max-height: 65vh;
-      .gray-20 {
-        background: rgba(90, 90, 113, 0.2);
-      }
-      .gray-40 {
-        background: rgba(90, 90, 113, 0.4);
-      }
+    display: block;
+
+    .gray-20 {
+      background: mat-color($trilogy-primary, 0.2);
     }
+    .gray-40 {
+      background: mat-color($trilogy-primary, 0.4);
+    }
+
     h1 {
       background-color: #efeff1;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -65,8 +64,25 @@
   }
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c4c4c4;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #c4c4c4;
+}
+
 table {
   border-collapse: collapse;
+
   th {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     text-align: left;
@@ -80,10 +96,18 @@ table {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
+}
 
-  // tr:first-child td {
-  //   padding-top: 0.6em;
-  // }
+.tableFixHead {
+  overflow-y: auto;
+  display: block;
+  max-height: 65vh;
+}
+
+.tableFixHead thead th {
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 
 .centering {
@@ -128,7 +152,6 @@ table {
   .mat-form-field-underline {
     display: none;
   }
-
   .mat-option {
     height: 40px !important;
   }
